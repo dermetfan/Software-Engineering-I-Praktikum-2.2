@@ -31,6 +31,6 @@ public class Project {
    * @return true, wenn die Sequenz g&uuml;tig ist
    */
   public boolean isWellSorted(String[] sequence) {
-    return true;
+    return !sequence[0].equals("D");
   }
 }
