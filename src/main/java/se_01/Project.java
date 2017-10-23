@@ -1,36 +1,33 @@
 package se_01;
 
-/**
- * &Uuml;bung 1.3: Projektmanagement in Java
- *
- * @author dgruen2s
- * @date 2017-10-18
- */
+import java.util.HashSet;
+import java.util.Set;
+
 public class Project {
+    private final String[][] rules;
+    private final Set<String> activities = new HashSet<>();
 
-  /**
-   * Repr&auml;sentiert die Abh&auml;ngigkeiten bzw. Regeln der Aktivit&auml;ten.
-   * <p>
-   * Die Abh&auml;ngigkeit <code>String[] {"A", "C"}</code> bedeutet dabei "A vor C"
-   */
-  private final String[][] dependencies;
+    public Project(final String[][] rules) {
+        this.rules = rules;
+        for (final String[] rule : rules) {
+            activities.add(rule[0]);
+            activities.add(rule[1]);
+        }
+    }
 
-  /**
-   * Standardkonstruktor
-   *
-   * @param dependencies Die Abh&auml;ngigkeiten der Aktivit&auml;ten
-   */
-  public Project(String[][] dependencies) {
-    this.dependencies = dependencies;
-  }
+    public boolean isWellSorted(final String[] sequence) {
+        final Set<String> yet = new HashSet<>();
 
-  /**
-   * &Uuml;berpr&uuml;ft, ob die Sequenz g&uuml;tig ist.
-   *
-   * @param sequence Die zu &uuml;berpr&uuml;fende Sequenz
-   * @return true, wenn die Sequenz g&uuml;tig ist
-   */
-  public boolean isWellSorted(String[] sequence) {
-    return !sequence[0].equals("D");
-  }
+        for (final String activity : sequence) {
+            for (final String[] rule : rules) {
+                if (rule[1].equals(activity) && !yet.contains(rule[0]) ||
+                    yet.contains(activity)) // each activity must occur only once
+                    return false;
+            }
+            yet.add(activity);
+        }
+
+        // the sequence must contain all activities
+        return yet.equals(activities);
+    }
 }
